@@ -10,12 +10,19 @@ import model.Person;
 import model.Person.Sex;
 
 public class StreamPractice {
+    private static final String COMMA_DELIMITER = ",";
+    private static final int EVEN_DIVISOR = 2;
+    private static final int ODD_DIVISOR = 2;
+    private static final int ODD_SUBTRACTOR = 1;
+    private static final int EVEN_REMAINDER = 0;
+    private static final int ODD_REMAINDER = 1;
+
     public int findMinEvenNumber(List<String> numbers) {
         return numbers.stream()
-                .flatMap(s -> List.of(s.split(",")).stream())
+                .flatMap(s -> List.of(s.split(COMMA_DELIMITER)).stream())
                 .map(String::trim)
                 .mapToInt(Integer::parseInt)
-                .filter(n -> n % 2 == 0)
+                .filter(n -> n % EVEN_DIVISOR == EVEN_REMAINDER)
                 .min()
                 .orElseThrow(() -> new RuntimeException(
                         "Can't get min value from list: " + numbers));
@@ -23,12 +30,13 @@ public class StreamPractice {
 
     public Double getOddNumsAverage(List<Integer> numbers) {
         List<Integer> modified = IntStream.range(0, numbers.size())
-                .map(i -> i % 2 != 0 ? numbers.get(i) - 1 : numbers.get(i))
+                .map(i -> i % ODD_DIVISOR != EVEN_REMAINDER
+                        ? numbers.get(i) - ODD_SUBTRACTOR : numbers.get(i))
                 .boxed()
                 .collect(Collectors.toList());
 
         return modified.stream()
-                .filter(n -> n % 2 != 0)
+                .filter(n -> n % ODD_DIVISOR != EVEN_REMAINDER)
                 .mapToInt(Integer::intValue)
                 .average()
                 .orElseThrow(NoSuchElementException::new);
@@ -67,5 +75,3 @@ public class StreamPractice {
                 .collect(Collectors.toList());
     }
 }
-
-
